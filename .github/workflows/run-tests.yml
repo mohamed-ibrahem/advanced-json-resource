@@ -13,7 +13,7 @@ jobs:
       fail-fast: true
       matrix:
         php: [8.2, 8.1, 8.0]
-        laravel: [9.*, 8.*]
+        laravel: [9.*]
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }}
 
@@ -36,7 +36,7 @@ jobs:
       - name: Install dependencies
         run: |
           composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update --with-all-dependencies
-          composer update --prefer-stable --prefer-dist --no-interaction
+          composer update --prefer-dist --no-interaction
 
       - name: Execute tests
         run: vendor/bin/phpunit
