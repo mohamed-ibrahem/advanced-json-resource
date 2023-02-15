@@ -1,0 +1,40 @@
+{
+    "name": "mohamed-ibrahim/advanced_json_resource",
+    "description": "Advanced JSON laravel resources",
+    "type": "library",
+    "require": {
+        "php": "^7.4|8.*",
+        "illuminate/support": "^7.0|^8.0|^9.0"
+    },
+    "require-dev": {
+        "laravel/legacy-factories": "^1.0.4",
+        "orchestra/testbench": "^5.0|^6.0|^7.0",
+        "phpunit/phpunit": "^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "AdvancedJsonResource\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "AdvancedJsonResource\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
+        "post-autoload-dump": [
+            "@php vendor/bin/testbench package:discover --ansi"
+        ]
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "AdvancedJsonResource\\AdvancedJsonResourceServiceProvider"
+            ]
+        }
+    }}
