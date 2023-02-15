@@ -14,6 +14,7 @@ jobs:
       matrix:
         php: [8.2, 8.1, 8.0, 7.4]
         laravel: [9.*, 8.*, 7.*]
+        stability: [prefer-lowest, prefer-stable]
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }}
 
@@ -36,6 +37,7 @@ jobs:
       - name: Install dependencies
         run: |
           composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update --with-all-dependencies
+          composer update --${{ matrix.stability }} --prefer-dist --no-interaction
 
       - name: Execute tests
         run: vendor/bin/phpunit
