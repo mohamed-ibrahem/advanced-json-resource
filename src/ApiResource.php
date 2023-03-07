@@ -20,7 +20,7 @@ abstract class ApiResource extends JsonResource
      *
      * @var string
      */
-    private static string $method;
+    private static $method;
 
     /**
      * @param string $method

@@ -12,7 +12,7 @@ class AdvancedJsonResourceServiceProvider extends ServiceProvider
      *
      * @var array<int, string>
      */
-    private array $responseMethods = [
+    private $responseMethods = [
         'index', 'show', 'form',
     ];
 
