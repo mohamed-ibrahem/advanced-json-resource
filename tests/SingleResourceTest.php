@@ -3,10 +3,11 @@
 namespace AdvancedJsonResource\Tests;
 
 use AdvancedJsonResource\Tests\Fixtures\Models\User;
+use AdvancedJsonResource\Tests\Fixtures\Resources\ArrayResource;
 use AdvancedJsonResource\Tests\Fixtures\Resources\UserResource;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class AdvancedJsonResourceWithCollectionsTest extends TestCase
+class SingleResourceTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -19,29 +20,73 @@ class AdvancedJsonResourceWithCollectionsTest extends TestCase
     {
         parent::setUp();
 
-        User::factory(10)->create();
+        User::factory()->create();
     }
 
     /** @test */
-    public function it_can_build_json_response_form_index_method(): void
+    public function show_method_with_single_array(): void
     {
-        $user = User::first();
-
-        $resource = UserResource::index($user);
+        $resource = ArrayResource::show([
+            'id' => 1,
+            'name' => 'User name',
+            'email' => 'user@example.com',
+        ]);
 
         $response = $resource->response()->getData();
         $data = (array) $response->data;
 
         $this->assertCount(2, $data);
-        $this->assertArrayNotHasKey('email', $data);
+        $this->assertArrayNotHasKey('name', $data);
         $this->assertEquals([
-            'id' => $user->id,
-            'name' => $user->name,
+            'id' => 1,
+            'email' => 'user@example.com',
         ], $data);
     }
 
     /** @test */
-    public function it_can_build_json_response_form_show_method(): void
+    public function form_method_with_single_array(): void
+    {
+        $resource = ArrayResource::form([
+            'id' => 1,
+            'name' => 'User name',
+            'email' => 'user@example.com',
+        ]);
+
+        $response = $resource->response()->getData();
+        $data = (array) $response->data;
+
+        $this->assertCount(2, $data);
+        $this->assertArrayNotHasKey('name', $data);
+        $this->assertArrayNotHasKey('email', $data);
+        $this->assertEquals([
+            'id' => 1,
+            'can_update' => true,
+        ], $data);
+    }
+
+    /** @test */
+    public function custom_method_with_single_array(): void
+    {
+        $resource = ArrayResource::custom([
+            'id' => 1,
+            'name' => 'User name',
+            'email' => 'user@example.com',
+        ]);
+
+        $response = $resource->response()->getData();
+        $data = (array) $response->data;
+
+        $this->assertCount(2, $data);
+        $this->assertArrayNotHasKey('name', $data);
+        $this->assertArrayNotHasKey('email', $data);
+        $this->assertEquals([
+            'id' => 1,
+            'custom' => 'custom',
+        ], $data);
+    }
+
+    /** @test */
+    public function show_method_with_single_model(): void
     {
         $user = User::first();
         $resource = UserResource::show($user);
@@ -58,7 +103,7 @@ class AdvancedJsonResourceWithCollectionsTest extends TestCase
     }
 
     /** @test */
-    public function it_can_build_json_response_form_form_method(): void
+    public function form_method_with_single_model(): void
     {
         $user= User::first();
         $resource = UserResource::form($user);
@@ -76,7 +121,7 @@ class AdvancedJsonResourceWithCollectionsTest extends TestCase
     }
 
     /** @test */
-    public function it_can_build_json_response_form_custom_method(): void
+    public function custom_method_with_single_model(): void
     {
         $user = User::first();
         $resource = UserResource::custom($user);
@@ -91,25 +136,5 @@ class AdvancedJsonResourceWithCollectionsTest extends TestCase
             'id' => $user->id,
             'custom' => 'custom',
         ], $data);
-    }
-
-    /** @test */
-    public function it_can_build_json_response_form_collection(): void
-    {
-        $users = User::take(5)->get();
-        $resource = UserResource::index($users);
-
-        $response = $resource->response()->getData();
-        $data = (array) $response->data;
-
-        $this->assertCount(5, $data);
-
-        $record = (array) $data[0];
-
-        $this->assertArrayNotHasKey('email', $record);
-        $this->assertEquals([
-            'id' => $users->first()->id,
-            'name' => $users->first()->name,
-        ], $record);
     }
 }
