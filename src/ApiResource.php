@@ -52,6 +52,8 @@ abstract class ApiResource extends JsonResource
     }
 
     /**
+     * Determine if the given resource should be collected into a collection resource.
+     *
      * @param Collection $resource
      * @return bool
      */
