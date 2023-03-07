@@ -4,6 +4,7 @@ namespace AdvancedJsonResource\Concerns;
 
 use BadMethodCallException;
 use Illuminate\Http\Request;
+use Throwable;
 
 trait DelegatesToResponse
 {
@@ -62,17 +63,17 @@ trait DelegatesToResponse
     /**
      * Dynamically handle calls to the class.
      *
-     * @param  string  $method
-     * @param  array  $parameters
+     * @param string $method
+     * @param array $parameters
      * @return mixed
      *
-     * @throws BadMethodCallException
+     * @throws Throwable
      */
     public static function __callStatic($method, $parameters)
     {
         try {
             return parent::__callStatic($method, $parameters);
-        } catch (BadMethodCallException $e) {
+        } catch (Throwable $e) {
             $term = static::getResponseMethod($method);
 
             if (method_exists(static::class, $term)) {
