@@ -2,9 +2,9 @@
 
 namespace AdvancedJsonResource\Concerns;
 
-use BadMethodCallException;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
-use Throwable;
+use JsonSerializable;
 
 trait DelegatesToResponse
 {
@@ -12,13 +12,14 @@ trait DelegatesToResponse
      * {@inheritdoc}
      *
      * @param Request $request
-     * @return array
+     * @return mixed[]|Arrayable|JsonSerializable
      */
-    public function toArray($request): array
+    public function toArray($request)
     {
-        $method = static::getResponseMethod(static::$method);
+        $method = static::$method;
 
         if (method_exists(static::class, $method)) {
+            /** @var array<int|string, mixed> $response */
             $response = $this->$method($request);
 
             return array_merge($this->shared($request), $response);
@@ -58,29 +59,5 @@ trait DelegatesToResponse
     public function toForm(Request $request): array
     {
         return [];
-    }
-
-    /**
-     * Dynamically handle calls to the class.
-     *
-     * @param string $method
-     * @param array $parameters
-     * @return mixed
-     *
-     * @throws Throwable
-     */
-    public static function __callStatic($method, $parameters)
-    {
-        try {
-            return parent::__callStatic($method, $parameters);
-        } catch (Throwable $e) {
-            $term = static::getResponseMethod($method);
-
-            if (method_exists(static::class, $term)) {
-                return static::init($method, ...$parameters);
-            }
-
-            throw $e;
-        }
     }
 }
