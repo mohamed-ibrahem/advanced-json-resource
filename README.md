@@ -4,7 +4,7 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/mohamed-ibrahem/advanced-json-resource.svg?style=flat-square)](https://packagist.org/packages/mohamed-ibrahem/advanced-json-resource)
 [![run-tests](https://github.com/mohamed-ibrahem/advanced-json-resource/actions/workflows/run-tests.yml/badge.svg)](https://github.com/mohamed-ibrahem/advanced-json-resource/actions/workflows/run-tests.yml)
 
-Create an advanced json responses for your Laravel application by creating a method for every response type, For example ```toIndex```, ```toShow```, ```toForm```, or a custom method name! Also you have shared method for all shared attributes.
+Create an advanced json responses for your Laravel application by creating a method for every response type, For example ```toIndex```, ```toShow```, ```toForm```, or a custom method name! Also you have ```shared``` method for all shared attributes.
 
 ## Installation
 
