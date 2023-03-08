@@ -23,7 +23,7 @@ And in the controller call these methods in snake case without ```to``` in the b
 
 ### Example
 
-```
+```php
 
 use AdvancedJsonResource\ApiResource;
 use App\Models\User;
@@ -104,7 +104,7 @@ class UserResource extends ApiResource
 
 In the controller:
 
-```
+```php
 use App\Models\User;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
