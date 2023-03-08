@@ -17,8 +17,8 @@ class AnonymousApiResourceCollection extends AnonymousResourceCollection
     /**
      * {@inheritdoc}
      *
-     * @param  mixed  $resource
-     * @param  string  $collects
+     * @param mixed $resource
+     * @param string $collects
      * @return void
      */
     public function __construct($resource, $collects, string $method)
@@ -34,9 +34,9 @@ class AnonymousApiResourceCollection extends AnonymousResourceCollection
      * @param Request $request
      * @return array<int|string, mixed>
      */
-    public function toArray(Request $request): array
+    public function toArray($request): array
     {
-        return $this->collection->map(function($resource) use($request) {
+        return $this->collection->map(function ($resource) use ($request) {
             $resource::$method = $this->method;
 
             return $resource->toArray($request);

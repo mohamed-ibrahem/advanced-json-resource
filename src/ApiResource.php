@@ -21,7 +21,7 @@ abstract class ApiResource extends JsonResource
     /**
      * {@inheritdoc}
      *
-     * @param  mixed  $resource
+     * @param mixed $resource
      * @return AnonymousApiResourceCollection
      */
     public static function collection($resource): AnonymousApiResourceCollection
@@ -38,7 +38,7 @@ abstract class ApiResource extends JsonResource
     /**
      * {@inheritdoc}
      *
-     * @param  mixed  $resource
+     * @param mixed $resource
      * @return AnonymousApiResourceCollection
      */
     protected static function newCollection($resource): AnonymousApiResourceCollection
@@ -64,7 +64,7 @@ abstract class ApiResource extends JsonResource
         try {
             return parent::__callStatic($method, $parameters);
         } catch (Throwable $e) {
-            $responseMethod = (string) Str::of($method)
+            $responseMethod = (string)Str::of($method)
                 ->studly()
                 ->prepend('to');
 
