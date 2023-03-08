@@ -24,7 +24,24 @@ abstract class ApiResource extends JsonResource
      * @param  mixed  $resource
      * @return AnonymousApiResourceCollection
      */
-    protected static function newCollection($resource)
+    public static function collection($resource): AnonymousApiResourceCollection
+    {
+        return tap(static::newCollection($resource), function ($collection) {
+            if (property_exists(static::class, 'preserveKeys')) {
+                /** @phpstan-ignore-next-line */
+                $collection->preserveKeys = (new static([]))->preserveKeys === true;
+            }
+        });
+    }
+
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param  mixed  $resource
+     * @return AnonymousApiResourceCollection
+     */
+    protected static function newCollection($resource): AnonymousApiResourceCollection
     {
         return new AnonymousApiResourceCollection(
             $resource,
