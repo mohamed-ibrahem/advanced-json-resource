@@ -4,7 +4,7 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/mohamed-ibrahem/advanced-json-resource.svg?style=flat-square)](https://packagist.org/packages/mohamed-ibrahem/advanced-json-resource)
 [![run-tests](https://github.com/mohamed-ibrahem/advanced-json-resource/actions/workflows/run-tests.yml/badge.svg)](https://github.com/mohamed-ibrahem/advanced-json-resource/actions/workflows/run-tests.yml)
 
-This is where your description should go. Try and limit it to a paragraph or two, and maybe throw in a mention of what PSRs you support to avoid any confusion with users and contributors.
+Create an advanced json responses for your Laravel application by creating a method for every response type, For example ```toIndex```, ```toShow```, ```toForm```, or a custom method name! Also you have shared method for all shared attributes.
 
 ## Installation
 
@@ -14,10 +14,128 @@ You can install the package via composer:
 composer require mohamed-ibrahem/advanced-json-resource 
 ```
 
-## Usage
+### Usage
 
-```php
-// Usage description here
+Every resource should extends the ```AdvancedJsonResponse\ApiResource``` class.
+
+Now based on your response type you can create the methods.
+And in the controller call these methods in snake case without ```to``` in the beginning.
+
+### Example
+
+```
+
+use AdvancedJsonResource\ApiResource;
+use App\Models\User;
+use Illuminate\Http\Request;
+
+/**
+ * @mixin User
+ */
+class UserResource extends ApiResource
+{
+    /**
+     * {@inheritdoc}
+     *
+     * @param Request $request
+     * @return array<string, mixed>
+     */
+    public function toIndex(Request $request): array
+    {
+        return [
+            'name' => $this->name,
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param Request $request
+     * @return array<string, mixed>
+     */
+    public function toShow(Request $request): array
+    {
+        return [
+            'email' => $this->email,
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param Request $request
+     * @return array<string, mixed>
+     */
+    public function toForm(Request $request): array
+    {
+        return [
+            'can_update' => true,
+        ];
+    }
+
+    /**
+     * This is a custom response method.
+     *
+     * @param Request $request
+     * @return array<string, mixed>
+     */
+    public function toCustom(Request $request): array
+    {
+        return [
+            'custom' => 'custom',
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param Request $request
+     * @return array<string, mixed>
+     */
+    public function shared(Request $request): array
+    {
+        return [
+            'id' => $this->id,
+        ];
+    }
+}
+
+```
+
+In the controller:
+
+```
+use App\Models\User;
+use App\Http\Resources\UserResource;
+use Illuminate\Http\Request;
+
+class UserController
+{
+    public function index(): UserResource
+    {
+        return UserResource::index(
+            User::all(),
+        );
+    }
+
+    public function store(Request $request): UserResource
+    {
+        //...
+
+        return UserResource::form($user);
+    }
+
+    public function show(User $user): UserResource
+    {
+        return UserResource::show($user);
+    }
+
+    public function custom(Request $request, User $user): UserResource
+    {
+        return UserResource::cutsom($user);
+    }
+}
+
 ```
 
 ### Testing
@@ -26,27 +144,7 @@ composer require mohamed-ibrahem/advanced-json-resource
 composer test
 ```
 
-### Changelog
-
-Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
-
-## Contributing
-
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
-
-### Security
-
-If you discover any security related issues, please email mohamed.ibr1994@gmail.com instead of using the issue tracker.
-
 ## Credits
 
 -   [Mohamed Ibrahim](https://github.com/mohamed-ibrahim)
 -   [All Contributors](../../contributors)
-
-## License
-
-The The Unlicense. Please see [License File](LICENSE.md) for more information.
-
-## Laravel Package Boilerplate
-
-This package was generated using the [Laravel Package Boilerplate](https://laravelpackageboilerplate.com).
