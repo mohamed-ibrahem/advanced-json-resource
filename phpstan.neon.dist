@@ -1,5 +1,12 @@
 parameters:
-  paths:
-    - src
-
-  level: 0
+    level: 8
+    paths:
+        - src
+    checkTooWideReturnTypesInProtectedAndPublicMethods: true
+    checkUninitializedProperties: true
+    checkImplicitMixed: true
+    checkBenevolentUnionTypes: true
+    exceptions:
+        check:
+            tooWideThrowType: true
+            missingCheckedExceptionInThrows: true

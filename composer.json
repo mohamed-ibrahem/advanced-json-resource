@@ -23,6 +23,7 @@
     },
     "scripts": {
         "test": "vendor/bin/phpunit",
+        "stan": "vendor/bin/phpstan analyse",
         "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
         "post-autoload-dump": [
             "@php vendor/bin/testbench package:discover --ansi"
@@ -30,11 +31,5 @@
     },
     "config": {
         "sort-packages": true
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "AdvancedJsonResource\\AdvancedJsonResourceServiceProvider"
-            ]
-        }
-    }}
+    }
+}

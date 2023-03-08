@@ -2,63 +2,65 @@
 
 namespace AdvancedJsonResource;
 
-use AdvancedJsonResource\Concerns\DelegatesToResponse;
-use AdvancedJsonResource\Concerns\HasSharedMethod;
-use ArrayAccess;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Throwable;
 
 abstract class ApiResource extends JsonResource
 {
-    use HasSharedMethod, DelegatesToResponse;
+    use Concerns\DelegatesToResponse;
+    use Concerns\HasSharedMethod;
 
     /**
-     * Current method used to build the response.
+     * The response method.
      *
      * @var string
      */
-    private static $method;
+    public static $method = '';
 
     /**
-     * @param string $method
-     * @param ...$parameters
-     * @return JsonResource
+     * {@inheritdoc}
+     *
+     * @param  mixed  $resource
+     * @return AnonymousApiResourceCollection
      */
-    public static function init(string $method, ...$parameters): JsonResource
+    protected static function newCollection($resource)
     {
-        static::$method = $method;
+        return new AnonymousApiResourceCollection(
+            $resource,
+            static::class,
+            static::$method,
+        );
+    }
 
-        $resource = collect(...$parameters);
 
-        if (self::shouldCollected($resource)) {
-            return static::collection($resource);
+    /**
+     * {@inheritdoc}
+     *
+     * @param string $method
+     * @param array<int, array<int, mixed>> $parameters
+     * @return mixed
+     *
+     * @throws Throwable
+     */
+    public static function __callStatic($method, $parameters)
+    {
+        try {
+            return parent::__callStatic($method, $parameters);
+        } catch (Throwable $e) {
+            $responseMethod = (string) Str::of($method)
+                ->studly()
+                ->prepend('to');
+
+            if (method_exists(static::class, $responseMethod)) {
+                return AnonymousApiResource::make(
+                    static::class,
+                    $responseMethod,
+                    ...$parameters
+                );
+            }
+
+            throw $e;
         }
-
-        return static::make(...$parameters);
-    }
-
-    /**
-     * Get current method used to build the response.
-     *
-     * @param string $method
-     * @return string
-     */
-    public static function getResponseMethod(string $method): string
-    {
-        return (string)Str::of($method)->title()->prepend('to');
-    }
-
-    /**
-     * Determine if the given resource should be collected into a collection resource.
-     *
-     * @param Collection $resource
-     * @return bool
-     */
-    public static function shouldCollected(Collection $resource): bool
-    {
-        return is_array($resource->first()) || $resource->first() instanceof ArrayAccess;
     }
 }
