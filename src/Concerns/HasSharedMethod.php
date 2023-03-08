@@ -10,7 +10,7 @@ trait HasSharedMethod
      * Shared attributes for all responses.
      *
      * @param Request $request
-     * @return array
+     * @return array<int|string, mixed>
      */
     public function shared(Request $request): array
     {

@@ -23,14 +23,14 @@ class AnonymousApiResource
     /**
      * The resource's collection.
      *
-     * @var array
+     * @var array<int|string, mixed>|null
      */
     private $resources;
 
     /**
      * @param class-string<ApiResource> $responseable
      * @param string $method
-     * @param mixed $resources
+     * @param array<int|string, mixed>|null $resources
      */
     public function __construct(string $responseable, string $method, $resources = null)
     {
@@ -42,13 +42,12 @@ class AnonymousApiResource
     /**
      * Create a new Api Response class.
      *
-     * @param class-string<ApiResource> $responseable
-     * @param string $method
-     * @param mixed $resources
+     * @param mixed ...$parameters
      * @return JsonResource
      */
     public static function make(...$parameters): JsonResource
     {
+        /** @phpstan-ignore-next-line */
         return (new static(...$parameters))->build();
     }
 

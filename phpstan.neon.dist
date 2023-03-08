@@ -3,6 +3,7 @@ parameters:
     paths:
         - src
     checkTooWideReturnTypesInProtectedAndPublicMethods: true
+    checkGenericClassInNonGenericObjectType: false
     checkUninitializedProperties: true
     checkImplicitMixed: true
     checkBenevolentUnionTypes: true

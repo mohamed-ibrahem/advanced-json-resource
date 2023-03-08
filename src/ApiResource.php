@@ -33,7 +33,6 @@ abstract class ApiResource extends JsonResource
         );
     }
 
-
     /**
      * {@inheritdoc}
      *

@@ -2,7 +2,9 @@
 
 namespace AdvancedJsonResource\Concerns;
 
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
+use JsonSerializable;
 
 trait DelegatesToResponse
 {
@@ -10,13 +12,14 @@ trait DelegatesToResponse
      * {@inheritdoc}
      *
      * @param Request $request
-     * @return array
+     * @return mixed[]|Arrayable|JsonSerializable
      */
-    public function toArray($request): array
+    public function toArray($request)
     {
         $method = static::$method;
 
         if (method_exists(static::class, $method)) {
+            /** @var array<int|string, mixed> $response */
             $response = $this->$method($request);
 
             return array_merge($this->shared($request), $response);

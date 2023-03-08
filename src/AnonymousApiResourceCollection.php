@@ -32,7 +32,7 @@ class AnonymousApiResourceCollection extends AnonymousResourceCollection
      * {@inheritdoc}
      *
      * @param Request $request
-     * @return array<mixed>
+     * @return array<int|string, mixed>
      */
     public function toArray(Request $request): array
     {
